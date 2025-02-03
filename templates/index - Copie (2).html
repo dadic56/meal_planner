@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Liste des plats</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+</head>
+<body>
+    <h1>Liste des plats</h1>
+    <div id="plats">
+        {% for plat in plats %}
+        <div class="plat-container">
+            <div class="plat">
+                {{ plat }}
+                <div class="menu-container">
+                    <span class="menu-btn" onclick="toggleMenu(this)">⋮</span>
+                    <div class="dropdown-menu">
+                        <a href="#" onclick="editPlat('{{ plat }}')">Modifier</a>
+                        <a href="#" onclick="deletePlat('{{ plat }}')">Supprimer</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <button onclick="genererListe()">Générer la liste de courses</button>
+    <button onclick="resetSelection()">Réinitialiser la sélection</button>
+    <button onclick="ouvrirModalAjout()">Ajouter un plat</button>
+    <div id="liste_courses">
+        <h3>Liste de courses</h3>
+        <div id="listeItems"></div>
+    </div>
+
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2>Modifier les ingrédients</h2>
+            <div id="ingredientsList"></div>
+            <button onclick="saveIngredients()">Sauvegarder</button>
+        </div>
+    </div>
+
+    <div id="ajoutModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2>Ajouter un plat et ses ingrédients</h2>
+            <input type="text" id="nouveauPlat" placeholder="Nom du plat">
+            <div id="nouveauxIngredients">
+                <div class="ingredient">
+                    <input type="text" class="ingredient-name" placeholder="Ingrédient">
+                    <input type="text" class="ingredient-quantity" placeholder="Quantité">
+                </div>
+            </div>
+            <button onclick="ajouterIngredient()">Ajouter un ingrédient</button>
+            <button onclick="sauvegarderNouveauPlat()">Sauvegarder</button>
+        </div>
+    </div>
+
+    <script>
+        const socket = io();
+        let selectedPlats = new Set();
+        let currentPlat = '';
+
+        function selectPlat(element) {
+            socket.emit('select_plat', { plat: element.textContent });
+        }
+
+        function genererListe() {
+            socket.emit('generer_liste');
+        }
+
+        function resetSelection() {
+            if (confirm("Êtes-vous sûr de vouloir réinitialiser la sélection ?")) {
+                socket.emit('reset_selection');
+            }
+        }
+
+        function ouvrirModalAjout() {
+            document.getElementById('ajoutModal').style.display = 'block';
+        }
+
+        function ajouterIngredient() {
+            const nouveauxIngredients = document.getElementById('nouveauxIngredients');
+            const ingredientDiv = document.createElement('div');
+            ingredientDiv.className = 'ingredient';
+
+            const nameInput = document.createElement('input');
+            nameInput.type = 'text';
+            nameInput.className = 'ingredient-name';
+            nameInput.placeholder = 'Ingrédient';
+
+            const quantityInput = document.createElement('input');
+            quantityInput.type = 'text';
+            quantityInput.className = 'ingredient-quantity';
+            quantityInput.placeholder = 'Quantité';
+
+            ingredientDiv.appendChild(nameInput);
+            ingredientDiv.appendChild(quantityInput);
+            nouveauxIngredients.appendChild(ingredientDiv);
+        }
+
+        function sauvegarderNouveauPlat() {
+            const plat = document.getElementById('nouveauPlat').value;
+            const ingredients = [];
+            document.querySelectorAll('#nouveauxIngredients .ingredient').forEach(div => {
+                const name = div.querySelector('.ingredient-name').value;
+                const quantity = div.querySelector('.ingredient-quantity').value;
+                ingredients.push({ name, quantity });
+            });
+
+            fetch('/ajouter_plat', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ plat, ingredients })
+            }).then(() => {
+                closeModal();
+                location.reload();
+            });
+        }
+
+        function editPlat(plat) {
+            currentPlat = plat;
+            fetch(`/get_ingredients?plat=${plat}`)
+                .then(response => response.json())
+                .then(data => {
+                    const ingredientsList = document.getElementById('ingredientsList');
+                    ingredientsList.innerHTML = '';
+                    data.forEach(item => {
+                        const ingredientDiv = document.createElement('div');
+                        ingredientDiv.className = 'ingredient';
+
+                        const nameInput = document.createElement('input');
+                        nameInput.type = 'text';
+                        nameInput.value = item.Ingrédient;
+                        nameInput.className = 'ingredient-name';
+                        nameInput.disabled = true;
+
+                        const quantityInput = document.createElement('input');
+                        quantityInput.type = 'text';
+                        quantityInput.value = item.Quantité;
+                        quantityInput.className = 'ingredient-quantity';
+
+                        ingredientDiv.appendChild(nameInput);
+                        ingredientDiv.appendChild(quantityInput);
+                        ingredientsList.appendChild(ingredientDiv);
+                    });
+                    document.getElementById('editModal').style.display = 'block';
+                });
+        }
+
+        function deletePlat(plat) {
+            if (confirm(`Êtes-vous sûr de vouloir supprimer le plat "${plat}" ?`)) {
+                fetch(`/delete_plat?plat=${plat}`, { method: 'DELETE' }).then(() => {
+                    location.reload();
+                });
+            }
+        }
+
+        function saveIngredients() {
+            const ingredients = [];
+            document.querySelectorAll('.ingredient').forEach(div => {
+                const name = div.querySelector('.ingredient-name').value;
+                const quantity = div.querySelector('.ingredient-quantity').value;
+                ingredients.push({ name, quantity });
+            });
+
+            fetch('/save_ingredients', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ plat: currentPlat, ingredients })
+            }).then(() => {
+                closeModal();
+                location.reload();
+            });
+        }
+
+        function closeModal() {
+            document.getElementById('editModal').style.display = 'none';
+            document.getElementById('ajoutModal').style.display = 'none';
+        }
+
+        function toggleMenu(element) {
+            const menu = element.nextElementSibling;
+            menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+        }
+
+        socket.on('update_selection', function(selectedPlats) {
+            document.querySelectorAll('.plat').forEach(plat => {
+                if (selectedPlats.includes(plat.textContent)) {
+                    plat.classList.add('selected');
+                } else {
+                    plat.classList.remove('selected');
+                }
+            });
+        });
+
+        socket.on('liste_courses', function(data) {
+            const listeItems = document.getElementById('listeItems');
+            listeItems.innerHTML = '';
+            data.forEach(item => {
+                const p = document.createElement('p');
+                p.textContent = `${item.ingredient}: ${item.quantite} ${item.unite}`;
+                listeItems.appendChild(p);
+            });
+        });
+
+        window.addEventListener('load', () => {
+            fetch('/get_selected_plats')
+            .then(response => response.json())
+            .then(data => {
+                selectedPlats = new Set(data);
+                document.querySelectorAll('.plat').forEach(plat => {
+                    if (selectedPlats.has(plat.textContent)) {
+                        plat.classList.add('selected');
+                    }
+                });
+            });
+        });
+
+        window.addEventListener('click', (event) => {
+            if (!event.target.matches('.menu-btn')) {
+                document.querySelectorAll('.dropdown-menu').forEach(menu => {
+                    menu.style.display = 'none';
+                });
+            }
+        });
+    </script>
+
+    <style>
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .ingredient {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .ingredient input {
+            margin-right: 10px;
+[_{{{CITATION{{{_1{](https://github.com/pat-tsai/materials-planner/tree/90aef13a351f63998c3f57db4b0d53f4216888a6/csv_to_html.py)[_{{{CITATION{{{_2{](https://github.com/sarthi42/Doctor-Portal/tree/d35c5baa34f05d3101d979ae83bf5e8a7c939ab9/Doc-apointment-sys%2Fprofile.php)[_{{{CITATION{{{_3{](https://github.com/lashka12/Travelo-Website/tree/48034500ebd76ca2eabdcd20eae49a1d1a47fded/Travelo%2FSystem%2Findex.php)[_{{{CITATION{{{_4{](https://github.com/ileeds/nba_detector/tree/01b45528890d20f81617d5f2277882b2196b98ee/script.js)[_{{{CITATION{{{_5{](https://github.com/bapspatil/ExamMate/tree/2206cf65d1885a4d1134e4225aa991de518465f2/homepage.php)[_{{{CITATION{{{_6{](https://github.com/hainguyenvan6799/Sales/tree/7ce7ac2f7e1221bfe49b90c9483ead8990278586/resources%2Fviews%2Ftests%2Fmodal.blade.php)

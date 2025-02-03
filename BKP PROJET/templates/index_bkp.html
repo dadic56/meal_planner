@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Liste des plats</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+</head>
+<body>
+    <h1>Liste des plats</h1>
+    <div id="plats">
+        {% for plat in plats %}
+        <div class="plat" onclick="selectPlat(this)">{{ plat }}</div>
+        {% endfor %}
+    </div>
+    <button onclick="genererListe()">Générer la liste de courses</button>
+    <div id="liste_courses">
+        <h3>Liste de courses</h3>
+        <div id="listeItems"></div>
+    </div>
+
+    <script>
+        const socket = io();
+        let selectedPlats = new Set();
+
+        function selectPlat(element) {
+            socket.emit('select_plat', { plat: element.textContent });
+        }
+
+        function genererListe() {
+            socket.emit('generer_liste');
+        }
+
+        socket.on('update_selection', function(selectedPlats) {
+            document.querySelectorAll('.plat').forEach(plat => {
+                if (selectedPlats.includes(plat.textContent)) {
+                    plat.classList.add('selected');
+                } else {
+                    plat.classList.remove('selected');
+                }
+            });
+        });
+
+        socket.on('liste_courses', function(data) {
+            const listeItems = document.getElementById('listeItems');
+            listeItems.innerHTML = '';
+            data.forEach(item => {
+                const p = document.createElement('p');
+                p.textContent = `${item.ingredient}: ${item.quantite} ${item.unite}`;
+                listeItems.appendChild(p);
+            });
+        });
+
+        window.addEventListener('load', () => {
+            fetch('/get_selected_plats')
+            .then(response => response.json())
+            .then(data => {
+                selectedPlats = new Set(data);
+                document.querySelectorAll('.plat').forEach(plat => {
+                    if (selectedPlats.has(plat.textContent)) {
+                        plat.classList.add('selected');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

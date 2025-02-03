@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Liste des plats</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+</head>
+<body>
+    <h1>Liste des plats</h1>
+    <div id="plats">
+        {% for plat in plats %}
+        <div class="plat">
+            <span onclick="selectPlat(this)">{{ plat }}</span>
+            <button class="menu-button" onclick="showMenu(event, '{{ plat }}')">⋮</button>
+            <div class="menu" id="menu-{{ plat }}">
+                <button onclick="editPlat('{{ plat }}')">Modifier</button>
+                <button onclick="deletePlat('{{ plat }}')">Supprimer</button>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <button onclick="genererListe()">Générer la liste de courses</button>
+    <button onclick="resetSelection()">Réinitialiser la sélection</button>
+    <div id="liste_courses">
+        <h3>Liste de courses</h3>
+        <div id="listeItems"></div>
+    </div>
+
+    <!-- Fenêtre modale pour modifier les ingrédients -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2 id="modal-title">Modifier la recette</h2>
+            <div id="ingredients-list"></div>
+            <button onclick="saveIngredients()">Enregistrer</button>
+        </div>
+    </div>
+
+    <script>
+        const socket = io();
+        let selectedPlats = new Set();
+        let currentPlat = '';
+
+        function selectPlat(element) {
+            socket.emit('select_plat', { plat: element.textContent });
+        }
+
+        function genererListe() {
+            socket.emit('generer_liste');
+        }
+
+        function resetSelection() {
+            if (confirm("Êtes-vous sûr de vouloir réinitialiser la sélection ?")) {
+                socket.emit('reset_selection');
+            }
+        }
+
+        function showMenu(event, plat) {
+            event.stopPropagation();
+            const menu = document.getElementById(`menu-${plat}`);
+            menu.style.display = 'block';
+            document.addEventListener('click', () => {
+                menu.style.display = 'none';
+            }, { once: true });
+        }
+
+        function editPlat(plat) {
+            currentPlat = plat;
+            document.getElementById('modal-title').textContent = `Modifier la recette : ${plat}`;
+            fetch(`/get_ingredients?plat=${plat}`)
+                .then(response => response.json())
+                .then(data => {
+                    const ingredientsList = document.getElementById('ingredients-list');
+                    ingredientsList.innerHTML = '';
+                    data.forEach(ingredient => {
+                        const div = document.createElement('div');
+                        div.classList.add('ingredient');
+                        div.innerHTML = `
+                            <input type="text" value="${ingredient.Ingrédient}" class="ingredient-name">
+                            <input type="text" value="${ingredient.Quantité}" class="ingredient-quantity">
+                        `;
+                        ingredientsList.appendChild(div);
+                    });
+                    document.getElementById('modal').style.display = 'block';
+                });
+        }
+
+        function deletePlat(plat) {
+            if (confirm("Êtes-vous sûr de vouloir supprimer " + plat + " ?")) {
+                socket.emit('delete_plat', { plat });
+            }
+        }
+
+        function closeModal() {
+            document.getElementById('modal').style.display = 'none';
+        }
+
+        function saveIngredients() {
+            const ingredients = [];
+            document.querySelectorAll('.ingredient').forEach(div => {
+                const name = div.querySelector('.ingredient-name').value;
+                const quantity = div.querySelector('.ingredient-quantity').value;
+                ingredients.push({ name, quantity });
+            });
+            socket.emit('edit_plat', { plat: currentPlat, ingredients });
+            closeModal();
+        }
+
+        socket.on('update_selection', function(selectedPlats) {
+            document.querySelectorAll('.plat span').forEach(plat => {
+                if (selectedPlats.includes(plat.textContent)) {
+                    plat.classList.add('selected');
+                } else {
+                    plat.classList.remove('selected');
+                }
+            });
+        });
+
+        socket.on('liste_courses', function(data) {
+            const listeItems = document.getElementById('listeItems');
+            listeItems.innerHTML = '';
+            data.forEach(item => {
+                const p = document.createElement('p');
+                p.textContent = `${item.ingredient}: ${item.quantite} ${item.unite}`;
+                listeItems.appendChild(p);
+            });
+        });
+
+        window.addEventListener('load', () => {
+            fetch('/get_selected_plats')
+            .then(response => response.json())
+            .then(data => {
+                selectedPlats = new Set(data);
+                document.querySelectorAll('.plat span').forEach(plat => {
+                    if (selectedPlats.has(plat.textContent)) {
+                        plat.classList.add('selected');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

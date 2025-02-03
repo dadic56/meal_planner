@@ -1,0 +1,116 @@
+Traceback (most recent call last):
+  File "/home/adguard/app_liste_course/app.py", line 82, in <module>
+    socketio.run(app, host="0.0.0.0", port=5000, debug=True)
+  File "/home/adguard/.local/lib/python3.9/site-packages/flask_socketio/__init__.py", line 650, in run
+    raise RuntimeError('The Werkzeug web server is not '
+RuntimeError: The Werkzeug web server is not designed to run in production. Pass allow_unsafe_werkzeug=True to the run() method to disable this error.
+  File "/home/adguard/app_liste_course/app.py", line 82
+    socketio.run(app, host="0.0.0.0", port=5000, debug=True, allow_unsafe_werkzeug=True)
+    ^
+IndentationError: expected an indented block
+Werkzeug appears to be used in a production deployment. Consider switching to a production web server instead.
+ * Serving Flask app 'app'
+ * Debug mode: on
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.1.78:5000
+Press CTRL+C to quit
+ * Restarting with stat
+Werkzeug appears to be used in a production deployment. Consider switching to a production web server instead.
+ * Debugger is active!
+ * Debugger PIN: 349-166-010
+ * Detected change in '/home/adguard/app_liste_course/app.py', reloading
+ * Restarting with stat
+Werkzeug appears to be used in a production deployment. Consider switching to a production web server instead.
+ * Debugger is active!
+ * Debugger PIN: 349-166-010
+Werkzeug appears to be used in a production deployment. Consider switching to a production web server instead.
+ * Serving Flask app 'app'
+ * Debug mode: on
+Address already in use
+Port 5000 is in use by another program. Either identify and stop that program, or start the server with a different port.
+192.168.1.46 - - [01/Feb/2025 20:16:27] "GET / HTTP/1.1" 200 -
+192.168.1.46 - - [01/Feb/2025 20:16:27] "GET /static/css/style.css HTTP/1.1" 304 -
+192.168.1.46 - - [01/Feb/2025 20:16:27] "GET /socket.io/?EIO=4&transport=polling&t=PJ2yMJF HTTP/1.1" 200 -
+192.168.1.46 - - [01/Feb/2025 20:16:27] "GET /get_selected_plats HTTP/1.1" 200 -
+192.168.1.46 - - [01/Feb/2025 20:16:27] "POST /socket.io/?EIO=4&transport=polling&t=PJ2yMJh&sid=8P3oIIZ5jXsTUbYYAAAA HTTP/1.1" 200 -
+192.168.1.46 - - [01/Feb/2025 20:16:27] "GET /socket.io/?EIO=4&transport=polling&t=PJ2yMJj&sid=8P3oIIZ5jXsTUbYYAAAA HTTP/1.1" 200 -
+192.168.1.59 - - [01/Feb/2025 20:18:15] "GET / HTTP/1.1" 200 -
+192.168.1.59 - - [01/Feb/2025 20:18:15] "GET /static/css/style.css HTTP/1.1" 200 -
+192.168.1.59 - - [01/Feb/2025 20:18:16] "GET /socket.io/?EIO=4&transport=polling&t=PJ2yn5S HTTP/1.1" 200 -
+192.168.1.59 - - [01/Feb/2025 20:18:16] "GET /favicon.ico HTTP/1.1" 404 -
+192.168.1.59 - - [01/Feb/2025 20:18:16] "GET /get_selected_plats HTTP/1.1" 200 -
+192.168.1.59 - - [01/Feb/2025 20:18:16] "POST /socket.io/?EIO=4&transport=polling&t=PJ2yn60&sid=AQ2wemwSYjFB2FKUAAAC HTTP/1.1" 200 -
+192.168.1.59 - - [01/Feb/2025 20:18:16] "GET /socket.io/?EIO=4&transport=polling&t=PJ2yn62&sid=AQ2wemwSYjFB2FKUAAAC HTTP/1.1" 200 -
+192.168.1.59 - - [01/Feb/2025 20:18:16] "GET /socket.io/?EIO=4&transport=polling&t=PJ2yn6n&sid=AQ2wemwSYjFB2FKUAAAC HTTP/1.1" 200 -
+192.168.1.46 - - [01/Feb/2025 20:19:03] "GET / HTTP/1.1" 200 -
+192.168.1.46 - - [01/Feb/2025 20:19:03] "GET /socket.io/?EIO=4&transport=websocket&sid=8P3oIIZ5jXsTUbYYAAAA HTTP/1.1" 200 -
+192.168.1.46 - - [01/Feb/2025 20:19:03] "GET /static/css/style.css HTTP/1.1" 304 -
+192.168.1.46 - - [01/Feb/2025 20:19:03] "GET /socket.io/?EIO=4&transport=polling&t=PJ2yyOL HTTP/1.1" 200 -
+192.168.1.46 - - [01/Feb/2025 20:19:03] "GET /get_selected_plats HTTP/1.1" 200 -
+192.168.1.46 - - [01/Feb/2025 20:19:03] "POST /socket.io/?EIO=4&transport=polling&t=PJ2yyPE&sid=XGD_2JIUCz3xk1zIAAAE HTTP/1.1" 200 -
+192.168.1.46 - - [01/Feb/2025 20:19:03] "GET /socket.io/?EIO=4&transport=polling&t=PJ2yyPF&sid=XGD_2JIUCz3xk1zIAAAE HTTP/1.1" 200 -
+192.168.1.46 - - [01/Feb/2025 20:19:03] "GET / HTTP/1.1" 200 -
+192.168.1.46 - - [01/Feb/2025 20:19:03] "GET /socket.io/?EIO=4&transport=websocket&sid=XGD_2JIUCz3xk1zIAAAE HTTP/1.1" 200 -
+192.168.1.46 - - [01/Feb/2025 20:19:03] "GET /static/css/style.css HTTP/1.1" 304 -
+192.168.1.46 - - [01/Feb/2025 20:19:03] "GET /socket.io/?EIO=4&transport=polling&t=PJ2yyT4 HTTP/1.1" 200 -
+192.168.1.46 - - [01/Feb/2025 20:19:03] "GET /get_selected_plats HTTP/1.1" 200 -
+192.168.1.46 - - [01/Feb/2025 20:19:03] "POST /socket.io/?EIO=4&transport=polling&t=PJ2yyTj&sid=Mn4hhZ1xUQonhQ5bAAAG HTTP/1.1" 200 -
+192.168.1.46 - - [01/Feb/2025 20:19:03] "GET /socket.io/?EIO=4&transport=polling&t=PJ2yyTk&sid=Mn4hhZ1xUQonhQ5bAAAG HTTP/1.1" 200 -
+192.168.1.46 - - [01/Feb/2025 20:19:04] "GET / HTTP/1.1" 200 -
+192.168.1.46 - - [01/Feb/2025 20:19:04] "GET /socket.io/?EIO=4&transport=websocket&sid=Mn4hhZ1xUQonhQ5bAAAG HTTP/1.1" 200 -
+192.168.1.46 - - [01/Feb/2025 20:19:04] "GET /static/css/style.css HTTP/1.1" 304 -
+192.168.1.46 - - [01/Feb/2025 20:19:04] "GET /socket.io/?EIO=4&transport=polling&t=PJ2yyf- HTTP/1.1" 200 -
+192.168.1.46 - - [01/Feb/2025 20:19:04] "GET /get_selected_plats HTTP/1.1" 200 -
+192.168.1.46 - - [01/Feb/2025 20:19:04] "POST /socket.io/?EIO=4&transport=polling&t=PJ2yygY&sid=7y6wbT1oFGnjKLGDAAAI HTTP/1.1" 200 -
+192.168.1.46 - - [01/Feb/2025 20:19:04] "GET /socket.io/?EIO=4&transport=polling&t=PJ2yygZ&sid=7y6wbT1oFGnjKLGDAAAI HTTP/1.1" 200 -
+192.168.1.46 - - [01/Feb/2025 20:19:04] "GET / HTTP/1.1" 200 -
+192.168.1.46 - - [01/Feb/2025 20:19:04] "GET /socket.io/?EIO=4&transport=websocket&sid=7y6wbT1oFGnjKLGDAAAI HTTP/1.1" 200 -
+192.168.1.46 - - [01/Feb/2025 20:19:04] "GET /static/css/style.css HTTP/1.1" 304 -
+192.168.1.46 - - [01/Feb/2025 20:19:04] "GET /socket.io/?EIO=4&transport=polling&t=PJ2yyiU HTTP/1.1" 200 -
+192.168.1.46 - - [01/Feb/2025 20:19:04] "GET /get_selected_plats HTTP/1.1" 200 -
+192.168.1.46 - - [01/Feb/2025 20:19:04] "POST /socket.io/?EIO=4&transport=polling&t=PJ2yyj1&sid=lmfEqXmcwUgUQgdGAAAK HTTP/1.1" 200 -
+192.168.1.46 - - [01/Feb/2025 20:19:04] "GET /socket.io/?EIO=4&transport=polling&t=PJ2yyj2&sid=lmfEqXmcwUgUQgdGAAAK HTTP/1.1" 200 -
+192.168.1.59 - - [01/Feb/2025 20:20:47] "GET /socket.io/?EIO=4&transport=websocket&sid=AQ2wemwSYjFB2FKUAAAC HTTP/1.1" 200 -
+192.168.1.46 - - [01/Feb/2025 21:19:21] "GET /socket.io/?EIO=4&transport=websocket&sid=lmfEqXmcwUgUQgdGAAAK HTTP/1.1" 200 -
+192.168.1.46 - - [01/Feb/2025 21:25:57] "GET /socket.io/?EIO=4&transport=polling&t=PJ3CGIO HTTP/1.1" 200 -
+192.168.1.46 - - [01/Feb/2025 21:25:57] "POST /socket.io/?EIO=4&transport=polling&t=PJ3CGJB&sid=T3XAAajzca_eQrl7AAAM HTTP/1.1" 200 -
+192.168.1.46 - - [01/Feb/2025 21:25:57] "GET /socket.io/?EIO=4&transport=polling&t=PJ3CGJK&sid=T3XAAajzca_eQrl7AAAM HTTP/1.1" 200 -
+192.168.1.46 - - [01/Feb/2025 21:26:12] "GET / HTTP/1.1" 200 -
+192.168.1.46 - - [01/Feb/2025 21:26:12] "GET /socket.io/?EIO=4&transport=websocket&sid=T3XAAajzca_eQrl7AAAM HTTP/1.1" 200 -
+192.168.1.46 - - [01/Feb/2025 21:26:12] "GET /static/css/style.css HTTP/1.1" 304 -
+192.168.1.46 - - [01/Feb/2025 21:26:12] "GET /socket.io/?EIO=4&transport=polling&t=PJ3CJzT HTTP/1.1" 200 -
+192.168.1.46 - - [01/Feb/2025 21:26:12] "GET /get_selected_plats HTTP/1.1" 200 -
+192.168.1.46 - - [01/Feb/2025 21:26:12] "POST /socket.io/?EIO=4&transport=polling&t=PJ3CJ-1&sid=wK-hvLjNAHFgFtIyAAAO HTTP/1.1" 200 -
+192.168.1.46 - - [01/Feb/2025 21:26:12] "GET /socket.io/?EIO=4&transport=polling&t=PJ3CJ-2&sid=wK-hvLjNAHFgFtIyAAAO HTTP/1.1" 200 -
+192.168.1.46 - - [01/Feb/2025 21:26:12] "GET /socket.io/?EIO=4&transport=polling&t=PJ3CJ-f&sid=wK-hvLjNAHFgFtIyAAAO HTTP/1.1" 200 -
+192.168.1.46 - - [01/Feb/2025 21:27:52] "GET / HTTP/1.1" 200 -
+192.168.1.46 - - [01/Feb/2025 21:27:52] "GET /socket.io/?EIO=4&transport=websocket&sid=wK-hvLjNAHFgFtIyAAAO HTTP/1.1" 200 -
+192.168.1.46 - - [01/Feb/2025 21:27:52] "GET /static/css/style.css HTTP/1.1" 304 -
+192.168.1.46 - - [01/Feb/2025 21:27:52] "GET /socket.io/?EIO=4&transport=polling&t=PJ3CiRQ HTTP/1.1" 200 -
+192.168.1.46 - - [01/Feb/2025 21:27:52] "GET /get_selected_plats HTTP/1.1" 200 -
+192.168.1.46 - - [01/Feb/2025 21:27:52] "POST /socket.io/?EIO=4&transport=polling&t=PJ3CiRo&sid=0h1dul-GAMmvShdwAAAQ HTTP/1.1" 200 -
+192.168.1.46 - - [01/Feb/2025 21:27:52] "GET /socket.io/?EIO=4&transport=polling&t=PJ3CiRp&sid=0h1dul-GAMmvShdwAAAQ HTTP/1.1" 200 -
+192.168.1.46 - - [01/Feb/2025 21:27:55] "GET / HTTP/1.1" 200 -
+192.168.1.46 - - [01/Feb/2025 21:27:55] "GET /socket.io/?EIO=4&transport=websocket&sid=0h1dul-GAMmvShdwAAAQ HTTP/1.1" 200 -
+192.168.1.46 - - [01/Feb/2025 21:27:55] "GET /static/css/style.css HTTP/1.1" 304 -
+192.168.1.46 - - [01/Feb/2025 21:27:55] "GET /socket.io/?EIO=4&transport=polling&t=PJ3CjCQ HTTP/1.1" 200 -
+192.168.1.46 - - [01/Feb/2025 21:27:55] "GET /get_selected_plats HTTP/1.1" 200 -
+192.168.1.46 - - [01/Feb/2025 21:27:55] "POST /socket.io/?EIO=4&transport=polling&t=PJ3CjD0&sid=xVPoCathw9COZcGdAAAS HTTP/1.1" 200 -
+192.168.1.46 - - [01/Feb/2025 21:27:55] "GET /socket.io/?EIO=4&transport=polling&t=PJ3CjD2&sid=xVPoCathw9COZcGdAAAS HTTP/1.1" 200 -
+192.168.1.46 - - [01/Feb/2025 21:28:23] "GET / HTTP/1.1" 200 -
+192.168.1.46 - - [01/Feb/2025 21:28:23] "GET /socket.io/?EIO=4&transport=websocket&sid=xVPoCathw9COZcGdAAAS HTTP/1.1" 200 -
+192.168.1.46 - - [01/Feb/2025 21:28:23] "GET /static/css/style.css HTTP/1.1" 304 -
+192.168.1.46 - - [01/Feb/2025 21:28:23] "GET /socket.io/?EIO=4&transport=polling&t=PJ3CpyU HTTP/1.1" 200 -
+192.168.1.46 - - [01/Feb/2025 21:28:23] "GET /get_selected_plats HTTP/1.1" 200 -
+192.168.1.46 - - [01/Feb/2025 21:28:23] "POST /socket.io/?EIO=4&transport=polling&t=PJ3Cpyr&sid=whl07mKlvgKGgaZLAAAU HTTP/1.1" 200 -
+192.168.1.46 - - [01/Feb/2025 21:28:23] "GET /socket.io/?EIO=4&transport=polling&t=PJ3Cpys&sid=whl07mKlvgKGgaZLAAAU HTTP/1.1" 200 -
+192.168.1.46 - - [01/Feb/2025 21:28:23] "GET /socket.io/?EIO=4&transport=polling&t=PJ3CpzH&sid=whl07mKlvgKGgaZLAAAU HTTP/1.1" 200 -
+192.168.1.46 - - [01/Feb/2025 21:36:36] "GET / HTTP/1.1" 200 -
+192.168.1.46 - - [01/Feb/2025 21:36:36] "GET /socket.io/?EIO=4&transport=websocket&sid=whl07mKlvgKGgaZLAAAU HTTP/1.1" 200 -
+192.168.1.46 - - [01/Feb/2025 21:36:36] "GET /static/css/style.css HTTP/1.1" 304 -
+192.168.1.46 - - [01/Feb/2025 21:36:36] "GET /socket.io/?EIO=4&transport=polling&t=PJ3EiOX HTTP/1.1" 200 -
+192.168.1.46 - - [01/Feb/2025 21:36:36] "GET /get_selected_plats HTTP/1.1" 200 -
+192.168.1.46 - - [01/Feb/2025 21:36:36] "POST /socket.io/?EIO=4&transport=polling&t=PJ3EiOs&sid=sNA438vG_6l1zVgCAAAW HTTP/1.1" 200 -
+192.168.1.46 - - [01/Feb/2025 21:36:36] "GET /socket.io/?EIO=4&transport=polling&t=PJ3EiOu&sid=sNA438vG_6l1zVgCAAAW HTTP/1.1" 200 -
